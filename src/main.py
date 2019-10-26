@@ -2,12 +2,33 @@ from src.dirac_notation.bra import Bra
 from src.dirac_notation.ket import Ket
 from src.dirac_notation.matrix import Matrix
 from src.dirac_notation.vector import Vector
+from src import config
+
 
 if __name__ == '__main__':
+    # Standard
+    print('\n')
+    comp_ket_0 = config.comp_ket_x(0, 2)
+    print(comp_ket_0)
+    comp_ket_1 = config.comp_ket_x(1, 2)
+    print(comp_ket_1)
+
+    fourier_ket_0 = config.fourier_ket_x(0, 2)
+    print(fourier_ket_0)
+    fourier_ket_1 = config.fourier_ket_x(1, 2)
+    print(fourier_ket_1)
+
+    fourier_bra_0 = config.fourier_bra_x(0, 2)
+    print(fourier_bra_0)
+    fourier_bra_1 = config.fourier_bra_x(1, 2)
+    print(fourier_bra_1)
+
+    """
     # Kets
     print('\n')
     ket_0 = Ket([1, 0])
     print(ket_0)
+    print(ket_0 == st_ket_0)
 
     ket_1 = Ket([0, 1])
     print(ket_1)
@@ -46,3 +67,4 @@ if __name__ == '__main__':
     print(ket_0 == ket_1)
     print(ket_0 != ket_1)
     print(ket_0 == ket_0)
+    """
