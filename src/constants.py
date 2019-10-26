@@ -3,10 +3,9 @@ import cmath
 
 import numpy as np
 
-from src.dirac_notation.bra import Bra
-from src.dirac_notation.ket import Ket
-from src.dirac_notation.matrix import Matrix
-from src.dirac_notation.basis import Basis
+from src.dirac.bra import Bra
+from src.dirac.ket import Ket
+from src.dirac.matrix import Matrix
 
 
 # Kets and Bras
@@ -22,23 +21,24 @@ angle_ket_0 = lambda theta : (math.cos(theta / 2) * comp_ket_x(0, 2)) + (math.si
 angle_ket_1 = lambda theta : (math.sin(theta / 2) * comp_ket_x(0, 2)) - (math.cos(theta / 2) * comp_ket_x(1, 2))
 
 
+"""
 # Basis
 
 
 comp_basis = lambda d : Basis([ comp_ket_x(i, d) for i in range(0, d) ])
 fourier_basis = lambda d : Basis([ fourier_ket_x(i, d) for i in range(0, d) ])
-
+"""
 
 # Unitary matrices
 
-
-identity_matrix = Matrix(np.array([1, 0], [0, 1]))
+zero_matrix = lambda d1, d2 : Matrix(np.zeros((d1, d2)))
+identity_matrix = lambda d : Matrix(np.identity(d))
 
 pauli_x_matrix = Matrix(np.array([[0, 1], [1, 0]])) # Try to write as a linear combination of ONBs?
 pauli_y_matrix = Matrix(np.array([[0, -1.0j], [1.0j, 0]]))
 pauli_z_matrix = Matrix(np.array([[1, 0], [0, -1]]))
 n_sigma_matrix = lambda nx, ny, nz : (nx * pauli_x_matrix) + (ny * pauli_y_matrix) + (nz * pauli_z_matrix)
 
-fourier_transform_matrix = lambda d : sum([ fourier_ket_x(i, d) * comp_bra_x(i, d) for i in range(0, d) ])
+fourier_transform_matrix = lambda d : sum([ fourier_ket_x(i, d) * comp_bra_x(i, d) for i in range(0, d) ], zero_matrix(d, d))
 hadamard_matrix = fourier_transform_matrix(2) # 2D is known as Hadamard gate (H)
-
+#print(hadamard_matrix == (fourier_ket_x(0, 2)*comp_bra_x(0, 2) + fourier_ket_x(1, 2)*comp_bra_x(1, 2)))

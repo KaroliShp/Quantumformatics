@@ -1,0 +1,58 @@
+import numpy as np
+
+from src.dirac.ket import Ket
+from src.dirac.matrix import Matrix
+
+
+class Bra(Matrix):
+    """
+    Class representing row vectors in Dirac notation
+    """
+
+    def __init__(self, obj):
+        if type(obj) == np.ndarray and len(obj.shape) == 1:
+            self.matrix = obj
+        elif type(obj) == list:
+            self.matrix = np.array(obj)
+        elif type(obj) == Ket:
+            self.matrix = np.conj(obj.matrix)
+        else:
+            raise ValueError('')
+
+    
+    def __str__(self):
+        sign = lambda x : '-' if x < 0 else '+'
+
+        dirac_str = ''
+
+        for i, component in enumerate(self.matrix):
+            dirac_str += f'+ ({sign(component.real)} {abs(component.real)} {sign(component.imag)} {abs(component.imag)}i) <{i}| '
+
+        if dirac_str[0] == '+':
+            return dirac_str[2:-1]
+        else:
+            return dirac_str[:-1]
+
+
+    def __mul__(self, obj):
+        """
+        Multiplication operator overload (self * obj)
+        """
+        if type(obj) == Ket:
+            return np.dot(self.matrix, obj.matrix)
+        elif type(obj) == Matrix:
+            return Bra(np.matmul(obj.matrix, self.matrix))
+        else:
+            return super().__mul__(obj)
+
+
+    def __rmul__(self, obj):
+        """
+        Reverse multiplication operator overload (obj * self)
+        :param obj: Other object
+        :return: Resulting Ket/scalar value
+        """
+        if type(obj) == Ket:
+            return Matrix(np.multiply(obj.matrix.reshape(obj.matrix.shape[0],1), self.matrix))
+        else:
+            return super().__rmul__(obj)

@@ -1,0 +1,66 @@
+import numbers
+
+import numpy as np
+
+
+class Matrix:
+    """
+    Class representing a matrix in Dirac notation
+    """
+
+    def __init__(self, obj):
+        if type(obj) == np.ndarray and len(obj.shape) == 2:
+            self.matrix = obj
+        else:
+            raise ValueError('')
+
+
+    # Magic methods
+
+
+    def __str__(self):
+        matrix_str = ''
+        
+        for row in self.matrix:
+            matrix_str += f'{row}\n'
+        
+        return matrix_str[:-1]
+
+
+    def __add__(self, obj):
+        if type(self) == type(obj) and self.matrix.shape == obj.matrix.shape:
+            return type(self)(self.matrix + obj.matrix)
+        return NotImplemented
+
+    def __sub__(self, obj):
+        if type(self) == type(obj) and self.matrix.shape == obj.matrix.shape:
+            return type(self)(self.matrix - obj.matrix)
+        return NotImplemented
+        
+
+    def __mul__(self, obj):
+        if isinstance(obj, numbers.Number):
+            return type(self)(self.matrix * obj)
+        return NotImplemented
+
+    
+    def __rmul__(self, obj):
+        if isinstance(obj, numbers.Number):
+            return type(self)(self.matrix * obj)
+        return NotImplemented
+
+    
+    def __truediv__(self, obj):
+        if isinstance(obj, numbers.Number):
+            return type(self)(self.matrix / obj)
+        return NotImplemented
+
+    
+    def __eq__(self, obj):
+        if type(self) == type(obj):
+            return np.array_equal(self.matrix, obj.matrix)
+        return NotImplemented
+
+
+    def __ne__(self, obj):
+        return not self.__eq__(obj)
