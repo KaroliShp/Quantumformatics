@@ -54,7 +54,7 @@ dirac.add(ket_0, ket_1) == ket_0 + ket_1  # True
 
 Dirac notation also supports human-readable output with any chosen vectors. The output is a linear combination of vectors `|0>, |1>, ..., |n>` by default, you can also choose decimal precision:
 
-```python
+```
 >>> dirac.print(ket_0)
 |0> = |0>
 >>> dirac.print(ket_0, [ket_0, ket_1])
