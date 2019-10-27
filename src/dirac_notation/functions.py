@@ -19,6 +19,7 @@ Mathematical functions for Dirac notation
 isBra = lambda x : type(x) == Bra
 isKet = lambda x : type(x) == Ket
 isMatrix = lambda x : type(x) == Matrix
+isSame = lambda x, y : type(x) == type(y)
 
 
 # Basic arithmetic operations
@@ -63,9 +64,10 @@ def matrix_multiply(obj1, obj2):
     return NotImplemented
 
 
-def tensor_product(obj1, obj2):
-    if isinstance(obj1, Matrix) and isinstance(obj2, Matrix):
-        return Matrix(np.kron(obj1.matrix, obj2.matrix, axes=0))
+def tensor(obj1, obj2):
+    # Todo: implement arbitrary number of objects
+    if isinstance(obj1, Matrix) and isinstance(obj2, Matrix) and isSame(obj1, obj2):
+        return type(obj1)(np.kron(obj1.matrix, obj2.matrix))
     return NotImplemented
 
 
@@ -78,10 +80,12 @@ def linear_combination(obj, objs):
 # Readability functions
 
 
-def view(obj, objs = None, precision = 2):
+def view(obj, objs = None, precision = 2, info = True):
     """
     Todo: print diagonalization of a matrix using chosen ONBs
     """
+
+    view = ''
 
     # Print Bra and Ket as a linear combination of the chosen vectors
     if isBra(obj) or isKet(obj):
@@ -98,7 +102,6 @@ def view(obj, objs = None, precision = 2):
         vec = lambda x, y : f'|{y}>' if isKet(x) else f'<{y}|'
 
         # Human readable output
-        view = ''
         for i, c in enumerate(res[1]):
             # Printing precision
             c = np.around(c, decimals = precision)
@@ -133,12 +136,19 @@ def view(obj, objs = None, precision = 2):
 
         # Take out the leading + if exists and trailing whitespace
         if view[0] == '+':
-            return view[2:-1]
-        return view[:-1]
+            view = view[2:-1]
+        else:
+            view = view[:-1]
+        
+        # Add more information
+        if info:
+            return f'value = {view} ; vector space = C^{obj.matrix.shape[0]} ; length = {np.around(np.linalg.norm(obj.matrix), decimals=precision)}'
+        else:
+            return view
 
     else:
         return str(obj)
 
 
-def print(obj, objs = None, precision = 2):
-    builtins.print(view(obj, objs, precision))
+def print(obj, objs = None, precision = 2, info = True):
+    builtins.print(view(obj, objs, precision, info))

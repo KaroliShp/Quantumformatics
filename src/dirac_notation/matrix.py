@@ -41,6 +41,7 @@ class Matrix:
             return type(self)(self.matrix + obj.matrix)
         return NotImplemented
 
+
     def __sub__(self, obj):
         if type(self) == type(obj) and self.matrix.shape == obj.matrix.shape:
             return type(self)(self.matrix - obj.matrix)

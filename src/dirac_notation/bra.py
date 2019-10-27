@@ -19,6 +19,10 @@ class Bra(Matrix):
         else:
             raise ValueError('')
 
+    
+    def __str__(self):
+        return str(self.matrix)
+    
 
     def __mul__(self, obj):
         """

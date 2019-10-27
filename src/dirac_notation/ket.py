@@ -17,6 +17,10 @@ class Ket(Matrix):
             raise ValueError('')
 
     
+    def __str__(self):
+        return str(self.matrix)
+    
+    
     def __rmul__(self, obj):
         """
         obj * ket
