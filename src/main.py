@@ -1,6 +1,7 @@
-from src.dirac.bra import Bra
-from src.dirac.ket import Ket
-from src.dirac.matrix import Matrix
+from src.dirac_notation.bra import Bra
+from src.dirac_notation.ket import Ket
+from src.dirac_notation.matrix import Matrix
+from src.dirac_notation import functions as dirac
 from src import constants
 
 
@@ -8,19 +9,26 @@ if __name__ == '__main__':
     # Standard
     print('\n')
     comp_ket_0 = constants.comp_ket_x(0, 2)
-    print(comp_ket_0)
+    dirac.print(comp_ket_0)
     comp_ket_1 = constants.comp_ket_x(1, 2)
-    print(comp_ket_1)
+    dirac.print(comp_ket_1)
 
     fourier_ket_0 = constants.fourier_ket_x(0, 2)
-    print(fourier_ket_0)
+    dirac.print(fourier_ket_0)
     fourier_ket_1 = constants.fourier_ket_x(1, 2)
-    print(fourier_ket_1)
+    dirac.print(fourier_ket_1)
 
     fourier_bra_0 = constants.fourier_bra_x(0, 2)
-    print(fourier_bra_0)
+    dirac.print(fourier_bra_0)
     fourier_bra_1 = constants.fourier_bra_x(1, 2)
-    print(fourier_bra_1)
+    dirac.print(fourier_bra_1)
+
+    psi = ((1 + 1j)/2) * constants.comp_ket_x(0, 2) + ((1 - 1j)/2) * constants.comp_ket_x(1, 2)
+    dirac.print(psi, [comp_ket_0, comp_ket_1])
+
+    print('\n')
+    dirac.print(comp_ket_0, [comp_ket_0, comp_ket_1])
+    dirac.print(comp_ket_0, [fourier_ket_0, fourier_ket_1])
 
     """
     # Kets

@@ -3,9 +3,9 @@ import cmath
 
 import numpy as np
 
-from src.dirac.bra import Bra
-from src.dirac.ket import Ket
-from src.dirac.matrix import Matrix
+from src.dirac_notation.bra import Bra
+from src.dirac_notation.ket import Ket
+from src.dirac_notation.matrix import Matrix
 
 
 # Kets and Bras

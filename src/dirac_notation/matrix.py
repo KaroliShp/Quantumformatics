@@ -14,6 +14,15 @@ class Matrix:
         else:
             raise ValueError('')
 
+    
+    def linear_combination(self, objs):
+        if not (False in [ isinstance(obj, Matrix) for obj in objs ]):
+            try:
+                return (True, np.linalg.solve(np.array([obj.matrix for obj in objs]).transpose(), self.matrix))
+            except np.linalg.LinAlgError as e:
+                return (False, 0)
+        return NotImplemented
+
 
     # Magic methods
 
