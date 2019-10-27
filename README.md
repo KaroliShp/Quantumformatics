@@ -26,10 +26,10 @@ from src.dirac_notation import functions as dirac
 # Create Kets representing basic states
 ket_0 = comp_ket_x(0, 2)  # |0> = ( 1 0 )
 ket_1 = comp_ket_x(1, 2)  # |1> = ( 0 1 )
-ket_psi_00 = dirac.tensor(ket_0, ket_0)  # |psi_00> = ( 1 0 0 0)
-ket_psi_01 = dirac.tensor(ket_0, ket_1)  # |psi_01> = ( 0 1 0 0)
-ket_psi_10 = dirac.tensor(ket_1, ket_0)  # |psi_10> = ( 0 0 1 0)
-ket_psi_11 = dirac.tensor(ket_1, ket_1)  # |psi_11> = ( 0 0 0 1)
+ket_psi_00 = dirac.tensor(ket_0, ket_0)  # |psi_00> = ( 1 0 0 0 )
+ket_psi_01 = dirac.tensor(ket_0, ket_1)  # |psi_01> = ( 0 1 0 0 )
+ket_psi_10 = dirac.tensor(ket_1, ket_0)  # |psi_10> = ( 0 0 1 0 )
+ket_psi_11 = dirac.tensor(ket_1, ket_1)  # |psi_11> = ( 0 0 0 1 )
 
 # Create a Ket representing an entangled state
 ket_phi_x = (1 / math.sqrt(2)) * ((dirac.tensor(ket_0, ket_0)) + (dirac.tensor(ket_1, ket_1)))
@@ -45,7 +45,7 @@ dirac.print(ket_phi_x, [ket_psi_00, ket_psi_01, ket_psi_10, ket_psi_11])
 
 ### Design
 
-`Matrix` class represents an arbitrary matrix in a d-dimensional Hilbert space. `Ket` and `Bra` classes are derived from `Matrix` class and represent column and row vectors respectively. Dirac notation implementation uses `numpy` package under the hood to hold the values and perform calculations. The main motivation behind having distinct `Ket` and `Bra` classes is the fact that `numpy` does not support column vectors natively (all vectors are treated as `(n,)` shape `np.ndarray`), which makes it harder to write BraKet notation using it.
+`Matrix` class represents an arbitrary matrix in a d-dimensional Hilbert space. `Ket` and `Bra` classes are derived from `Matrix` class and represent column and row vectors respectively. `Matrix` implementation uses `numpy` package under the hood (composition) to hold the values and perform calculations. The main motivation behind having distinct `Ket` and `Bra` classes is the fact that `numpy` does not support column vectors natively (all vectors are treated as `(n,)` shape `np.ndarray`), which makes it harder to write BraKet notation using it.
 
 ### Usage
 

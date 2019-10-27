@@ -16,13 +16,13 @@ Mathematical functions for Dirac notation
 # Type functions
 
 
-isBra = lambda x : type(x) == Bra
-isKet = lambda x : type(x) == Ket
-isMatrix = lambda x : type(x) == Matrix
-isSame = lambda x, y : type(x) == type(y)
+is_bra = lambda x : type(x) == Bra
+is_ket = lambda x : type(x) == Ket
+is_matrix = lambda x : type(x) == Matrix
+is_same = lambda x, y : type(x) == type(y)
 
 
-# Basic arithmetic operations
+# Arithmetic operations
 
 
 def add(obj1, obj2):
@@ -49,24 +49,21 @@ def not_equals(obj1, obj2):
     return obj1 != obj2
 
 
-# Additional functions
-
-
 def braket(obj1, obj2):
-    if isBra(obj1) and isKet(obj2):
+    if is_bra(obj1) and is_ket(obj2):
         return obj1 * obj2
     return NotImplemented
 
 
 def matrix_multiply(obj1, obj2):
-    if isMatrix(obj1) and isMatrix(obj2):
+    if is_matrix(obj1) and is_matrix(obj2):
         return Matrix(np.multiply(obj1.matrix, obj2.matrix))
     return NotImplemented
 
 
 def tensor(obj1, obj2):
     # Todo: implement arbitrary number of objects
-    if isinstance(obj1, Matrix) and isinstance(obj2, Matrix) and isSame(obj1, obj2):
+    if isinstance(obj1, Matrix) and isinstance(obj2, Matrix) and is_same(obj1, obj2):
         return type(obj1)(np.kron(obj1.matrix, obj2.matrix))
     return NotImplemented
 
@@ -76,6 +73,13 @@ def linear_combination(obj, objs):
         return obj.linear_combination(objs)
     return NotImplemented
 
+
+# Information functions
+
+
+is_unit = lambda x : (is_bra(x) or is_ket(x)) and np.linalg.norm(x.matrix) == 1
+is_unitary = lambda x : is_matrix(x) and np.allclose(np.eye(x.matrix.shape[0]), x.matrix.H * x.matrix)
+is_orthonormal = lambda x, y
 
 # Readability functions
 
@@ -88,7 +92,7 @@ def view(obj, objs = None, precision = 2, info = True):
     view = ''
 
     # Print Bra and Ket as a linear combination of the chosen vectors
-    if isBra(obj) or isKet(obj):
+    if is_bra(obj) or is_ket(obj):
 
         # Get linear combination coefficients
         if objs is None:
@@ -99,7 +103,7 @@ def view(obj, objs = None, precision = 2, info = True):
 
         # Helper functions
         sign = lambda x : '+' if x >= 0 else '-'
-        vec = lambda x, y : f'|{y}>' if isKet(x) else f'<{y}|'
+        vec = lambda x, y : f'|{y}>' if is_ket(x) else f'<{y}|'
 
         # Human readable output
         for i, c in enumerate(res[1]):
