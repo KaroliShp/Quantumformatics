@@ -12,5 +12,5 @@ class Qudit:
         
         self.id = id
         self.state = state
-        self.vector_space = state.size
+        self.vector_space = state.vector_space
     

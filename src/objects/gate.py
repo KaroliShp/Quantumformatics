@@ -11,4 +11,4 @@ class Gate:
         assert dirac.is_unitary(matrix):
         
         self.matrix = matrix
-        self.rank = state.size
+        self.vector_space = state.vector_space

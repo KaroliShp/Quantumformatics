@@ -22,7 +22,7 @@ class Matrix:
         return NotImplemented
 
     
-    def size(self):
+    def vector_space(self):
         return self.matrix.size
 
 

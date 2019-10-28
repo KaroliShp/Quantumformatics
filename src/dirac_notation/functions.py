@@ -79,7 +79,7 @@ def linear_combination(obj, objs):
 
 is_unit = lambda x : (is_bra(x) or is_ket(x)) and np.linalg.norm(x.matrix) == 1
 is_unitary = lambda x : is_matrix(x) and np.allclose(np.eye(x.matrix.shape[0]), x.matrix.H * x.matrix)
-is_orthonormal = lambda x, y
+# is_orthonormal = lambda x, y
 
 # Readability functions
 
@@ -87,6 +87,7 @@ is_orthonormal = lambda x, y
 def view(obj, objs = None, precision = 2, info = True):
     """
     Todo: print diagonalization of a matrix using chosen ONBs
+    Extract to be reused throughout
     """
 
     view = ''

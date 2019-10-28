@@ -13,14 +13,14 @@ from src.objects.qudit import Qudit
 from src.objects.basis import Basis
 
 
-# Qudit functions
+# Qudits
 
 
 def set_state(state: Ket, qudit: Qudit) -> None:
     assert isinstance(state, Ket) and isinstance(qudit, Qudit)
 
     qudit.state = state
-    qudit.vector_space = state.size
+    qudit.vector_space = state.vector_space
 
 
 def randomize(qudit: Qudit) -> None:
@@ -29,7 +29,7 @@ def randomize(qudit: Qudit) -> None:
     self.state = Ket(np.random.rand(self.vector_space))
 
 
-# General functions
+# Reversable processes
 
 
 def apply_gate(gate: Gate, qudit: Qudit) -> None:
@@ -37,9 +37,12 @@ def apply_gate(gate: Gate, qudit: Qudit) -> None:
     Apply quantum gate representing a reversable process on a qudit
     """
     assert isinstance(gate, Gate) and isinstance(qudit, Qudit)
-    assert gate.rank == qudit.vector_space
+    assert gate.vector_space == qudit.vector_space
 
     qubit.state = gate.matrix * qudit.state
+
+
+# Basic measurements
 
 
 def get_probabilities(basis: Basis, qudit: Qudit) -> list:
@@ -47,11 +50,11 @@ def get_probabilities(basis: Basis, qudit: Qudit) -> list:
     Get probabilities of qudit measurement on the chosen ONB
     """
     assert isinstance(basis, Basis) and isinstance(qudit, Qudit)
-    assert basis.rank == qudit.vector_space
+    assert basis.vector_space == qudit.vector_space
     
     # Obtain probabilities and assert the sum of 1
-    result = np.zeros(basis.rank)
-    for i in range(0, basis.rank):
+    result = np.zeros(basis.vector_space)
+    for i in range(0, basis.vector_space):
         result[i] = abs(Bra(basis.vector[i]) * qudit.state) ** 2
     assert math.isclose(sum(result), 1, abs_tol = 0.02)
 
@@ -78,3 +81,6 @@ def measure(basis: Basis, qudit: Qudit) -> int:
     set_state(basis[outcome], qudit)
 
     return outcome
+
+
+# Composite systems

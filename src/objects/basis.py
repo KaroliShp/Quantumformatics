@@ -9,3 +9,4 @@ class Basis:
 
     def __init__(self, vectors):
         self.vectors = vectors
+        self.vector_space = vector_space

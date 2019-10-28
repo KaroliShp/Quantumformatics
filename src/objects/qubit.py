@@ -9,4 +9,4 @@ class Qubit(Qudit):
 
     def __init__(self, state, id = None):
         super().__init__(id, state)
-        assert state.size == 2:
+        assert state.vector_space == 2:
