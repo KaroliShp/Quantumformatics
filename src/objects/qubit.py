@@ -6,7 +6,10 @@ from src import constants as const
 
 
 class Qubit(Qudit):
+    """
+    Special case of Qudit in 2D Hilbert space
+    """
 
-    def __init__(self, state, id = None):
-        super().__init__(id, state)
+    def __init__(self, state: Ket):
+        super().__init__(state)
         assert state.vector_space == 2:

@@ -7,6 +7,10 @@ from src import constants as const
 
 class Basis:
 
-    def __init__(self, vectors):
+    def __init__(self, vectors: list):
+        # Check that the vectors form an ONB
+        vectors = np.array(vectors)
+        assert vectors.transpose() * vectors == const.identity_matrix
+
         self.vectors = vectors
-        self.vector_space = vector_space
+        self.vector_space = vectors.shape[0]

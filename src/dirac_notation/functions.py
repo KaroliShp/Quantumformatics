@@ -74,12 +74,24 @@ def linear_combination(obj, objs):
     return NotImplemented
 
 
+def adjoint(obj):
+    if is_ket(obj):
+        return Bra(obj)
+    elif is_bra(obj):
+        return Ket(np.conj(obj.matrix))
+    elif is_matrix(obj):
+        return Matrix(np.conj(obj.matrix))
+    return NotImplemented
+
+
 # Information functions
 
 
 is_unit = lambda x : (is_bra(x) or is_ket(x)) and np.linalg.norm(x.matrix) == 1
 is_unitary = lambda x : is_matrix(x) and np.allclose(np.eye(x.matrix.shape[0]), x.matrix.H * x.matrix)
-# is_orthonormal = lambda x, y
+is_orthogonal = lambda x, y : is_same(x, y) and (is_bra(x) or is_ket(x)) and np.dot(x.matrix, y.matrix) == 0
+is_orthonormal = lambda x, y : is_orthogonal(x, y) and is_unit(x) and is_unit(y)
+
 
 # Readability functions
 

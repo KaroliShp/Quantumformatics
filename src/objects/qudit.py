@@ -7,10 +7,10 @@ from src import constants as const
 
 class Qudit:
 
-    def __init__(self, state, id = None):
+    def __init__(self, state: Ket):
         assert dirac.is_ket(state) and dirac.is_unit(state)
         
-        self.id = id
         self.state = state
         self.vector_space = state.vector_space
+        self.composite_system = None
     

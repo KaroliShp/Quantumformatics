@@ -7,7 +7,7 @@ from src import constants as const
 
 class Gate:
 
-    def __init__(self, matrix):
+    def __init__(self, matrix: Matrix):
         assert dirac.is_unitary(matrix):
         
         self.matrix = matrix
