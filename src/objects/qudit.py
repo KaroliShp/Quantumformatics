@@ -5,8 +5,12 @@ from src.dirac_notation import functions as dirac
 from src import constants as const
 
 
-class Qubit(Qudit):
+class Qudit:
 
     def __init__(self, state, id = None):
-        super().__init__(id, state)
-        assert state.size == 2:
+        assert dirac.is_ket(state) and dirac.is_unit(state)
+        
+        self.id = id
+        self.state = state
+        self.vector_space = state.size
+    

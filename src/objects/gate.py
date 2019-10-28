@@ -10,6 +10,5 @@ class Gate:
     def __init__(self, matrix):
         assert dirac.is_unitary(matrix):
         
-        self.id = id
-        self.state = state
-        self.vector_space = state.size
+        self.matrix = matrix
+        self.rank = state.size
