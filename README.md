@@ -25,6 +25,12 @@ $ cd Quantumformatics
 $ pip install requirements.txt
 ```
 
+To run tests:
+
+```
+$ pytest
+```
+
 ## Design
 
 TODO

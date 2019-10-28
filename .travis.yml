@@ -1,0 +1,19 @@
+language: python
+python:
+  - "3.6"
+
+# Install dependencies
+install:
+  - pip install -r requirements.txt
+
+# Set up PYTHONPATH
+before_script:
+  - export PYTHONPATH=$PYTHONPATH:$(pwd)
+
+# Run tests
+script:
+  - pytest --cov=encrypio{/,/p2p,/database}
+
+# Update code coverage
+after_success:
+  - codecov
