@@ -21,7 +21,7 @@ TODO
 
 Language: Python 3.6+
 
-```
+```shell
 $ git clone https://github.com/KaroliShp/Quantumformatics
 $ cd Quantumformatics
 $ pip install requirements.txt
@@ -29,7 +29,7 @@ $ pip install requirements.txt
 
 To run tests:
 
-```
+```shell
 $ pytest
 ```
 
