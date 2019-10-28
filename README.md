@@ -1,5 +1,7 @@
 # Quantumformatics
 
+[![Build Status](https://travis-ci.com/KaroliShp/Quantumformatics.svg?token=H6dNDzgb7zQyC23kvSsb&branch=master)](https://travis-ci.com/KaroliShp/Quantumformatics)
+
 (Educational) framework for simulating quantum information and computation theory on classic computers.
 
 IN PROGRESS
