@@ -15,7 +15,8 @@ class Ket(Matrix):
             self.matrix = np.array(obj)
         else:
             raise ValueError('')
-    
+        
+        self.vector_space = self.matrix.size
 
     def __str__(self):
         return str(self.matrix)

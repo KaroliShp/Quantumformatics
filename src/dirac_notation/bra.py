@@ -18,6 +18,8 @@ class Bra(Matrix):
             self.matrix = np.conj(obj.matrix)
         else:
             raise ValueError('')
+        
+        self.vector_space = self.matrix.size
 
     
     def __str__(self):

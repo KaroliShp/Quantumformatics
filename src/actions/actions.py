@@ -6,7 +6,7 @@ from src.dirac_notation.bra import Bra
 from src.dirac_notation.ket import Ket
 from src.dirac_notation.matrix import Matrix
 from src.dirac_notation import functions as dirac
-from src import constants as const
+from src.dirac_notation import constants as const
 from src.objects.gate import Gate
 from src.objects.qubit import Qubit
 from src.objects.qudit import Qudit
@@ -55,7 +55,7 @@ def get_probabilities(basis: Basis, qudit: Qudit) -> list:
     # Obtain probabilities and assert the sum of 1
     result = np.zeros(basis.vector_space)
     for i in range(0, basis.vector_space):
-        result[i] = abs(Bra(basis.vector[i]) * qudit.state) ** 2
+        result[i] = abs(Bra(basis.states[i]) * qudit.state) ** 2
     assert math.isclose(sum(result), 1, abs_tol = 0.02)
 
     # Hacky way to make it sum up to 1 perfectly (fix later)
@@ -64,7 +64,7 @@ def get_probabilities(basis: Basis, qudit: Qudit) -> list:
     elif sum(result) < 1.0:
         result[-1] += 1.0 - sum(result)
 
-    return result
+    return np.round(result, decimals=2) # TODO fix rounding
 
 
 def measure(basis: Basis, qudit: Qudit) -> int:
@@ -72,13 +72,13 @@ def measure(basis: Basis, qudit: Qudit) -> int:
     Measure qudit on a chosen ONB
     """
     # Obtain probabilities
-    result = measure_basis(basis, qudit)
+    result = get_probabilities(basis, qudit)
 
     # Obtain the outcome
-    outcome = np.random.choice(result.shape[0], 1, p = result)
+    outcome = np.random.choice(result.shape[0], 1, p = result)[0]
 
     # Change qudit state
-    set_state(basis[outcome], qudit)
+    set_state(basis.states[outcome], qudit)
 
     return outcome
 

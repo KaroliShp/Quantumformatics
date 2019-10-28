@@ -4,77 +4,43 @@ from src.dirac_notation.matrix import Matrix
 from src.dirac_notation import functions as dirac
 from src.dirac_notation import constants as const
 
+from src.objects.basis import Basis
+from src.objects.composition import Composition
+from src.objects.gate import Gate
+from src.objects.qudit import Qudit
+from src.objects.qubit import Qubit
+from src.actions.actions import * # todo import properly
+
 
 if __name__ == '__main__':
-    # Standard
-    print('\n')
-    comp_ket_0 = const.comp_ket_x(0, 2)
-    #dirac.print(comp_ket_0)
-    comp_ket_1 = const.comp_ket_x(1, 2)
-    #dirac.print(comp_ket_1)
+    # Photon polarization example
 
-    fourier_ket_0 = const.fourier_ket_x(0, 2)
-    #dirac.print(fourier_ket_0)
-    fourier_ket_1 = const.fourier_ket_x(1, 2)
-    #dirac.print(fourier_ket_1)
+    # Set up the system
+    qubit_A = Qubit(const.ket_0)  # Vertical polarization, |0>
+    qubit_B = Qubit(const.ket_1)  # Horizontal polarization, |1>
+    computational_basis = Basis([const.ket_0, const.ket_1])  # Polarising filter 1, {|0>, |1>}
+    fourier_basis = Basis([const.ket_plus, const.ket_minus]) # Polarising filter 2, {|+>, |->}
 
-    fourier_bra_0 = const.fourier_bra_x(0, 2)
-    #dirac.print(fourier_bra_0)
-    fourier_bra_1 = const.fourier_bra_x(1, 2)
-    #dirac.print(fourier_bra_1)
+    # Check the probabilities of a vertically polarized photon passing
+    # through vertical and horizontal filters 
+    p_1 = get_probabilities(computational_basis, qubit_A)
+    assert p_1[0] == 1  # Vertically polarized photon will pass with probability 1
+    assert p_1[1] == 0  # Horizontally polarized photon will never pass filter
 
-    """
-    psi = ((1 + 1j)/2) * const.comp_ket_x(0, 2) + ((1 - 1j)/2) * const.comp_ket_x(1, 2)
-    dirac.print(psi, [comp_ket_0, comp_ket_1])
-    dirac.print(const.ket_0, [fourier_ket_0, fourier_ket_1], precision = 2, info = True)
-    """
+    # Check the probabilities of a vertically polarized photon passing
+    # through filters at 45 degrees angles
+    p_2 = get_probabilities(fourier_basis, qubit_A)
+    assert p_2[0] == 0.5  # Vertically polarized photon will pass with probability 1/2
+    assert p_2[1] == 0.5  # Vertically polarized photon will pass with probability 1/2
 
-    # Composite systems
-    #dirac.print(const.ket_psi_00)
+    # Perform measurement on A in computational basis
+    # and check that it is indeed in state 0 after the measurement
+    measure(computational_basis, qubit_A)
+    assert qubit_A.state == const.ket_0
 
+    # Perform measurement on B in fourier basis and print the resulting state of the qubit
+    outcome = measure(fourier_basis, qubit_B)
+    print(outcome)
+    dirac.print(qubit_B.state)
 
-    """
-    # Kets
-    print('\n')
-    ket_0 = Ket([1, 0])
-    print(ket_0)
-    print(ket_0 == st_ket_0)
-
-    ket_1 = Ket([0, 1])
-    print(ket_1)
-
-    ket_x = Ket([-2, 1])
-    print(ket_x)
-
-    ket_complex = Ket([1 + 1j, -1 - 1j])
-    print(ket_complex)
-
-    # Bra
-    print('\n')
-    bra_0 = Bra([1, 0])
-    print(bra_0)
-
-    bra_0 = Bra(ket_0)
-    print(bra_0)
-
-    bra_complex = Bra(ket_complex)
-    print(bra_complex)
-
-    # Arithmetics
-    print('\n')
-    print(ket_0 + ket_1)
-    print(ket_0 * 2)
-    print(-2 * ket_0)
-    print(ket_0 / 2)
-
-    print(bra_0 + Bra(ket_1))
-    print(bra_0 * ket_0)
-    #print(ket_0 * ket_0)
-    print(ket_0 * bra_0)
-
-    # Comparison
-    print('\n')
-    print(ket_0 == ket_1)
-    print(ket_0 != ket_1)
-    print(ket_0 == ket_0)
-    """
+    

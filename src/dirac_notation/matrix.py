@@ -11,6 +11,7 @@ class Matrix:
     def __init__(self, obj):
         assert type(obj) == np.ndarray and len(obj.shape) == 2
         self.matrix = obj
+        self.vector_space = self.matrix.size
 
     
     def linear_combination(self, objs):
@@ -20,10 +21,6 @@ class Matrix:
             except np.linalg.LinAlgError as e:
                 return (False, 0)
         return NotImplemented
-
-    
-    def vector_space(self):
-        return self.matrix.size
 
 
     # Magic methods

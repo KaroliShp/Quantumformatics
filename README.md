@@ -11,11 +11,41 @@ IN PROGRESS
 - [Example](#Example)
 - [Setup](#Setup)
 - [Design](#Design)
-- [Dirac (bra-ket) notation](#Dirac-(bra-ket)-notation)
+- [Dirac (bra-ket) notation](#Dirac-bra-ket-notation)
 
 ## Example
 
-TODO
+```python
+# Photon polarization example
+
+# Set up the system
+qubit_A = Qubit(const.ket_0)  # Vertical polarization, |0>
+qubit_B = Qubit(const.ket_1)  # Horizontal polarization, |1>
+computational_basis = Basis([const.ket_0, const.ket_1])  # Polarising filter 1, {|0>, |1>}
+fourier_basis = Basis([const.ket_plus, const.ket_minus]) # Polarising filter 2, {|+>, |->}
+
+# Check the probabilities of a vertically polarized photon passing
+# through vertical and horizontal filters 
+p_1 = get_probabilities(computational_basis, qubit_A)
+assert p_1[0] == 1  # Vertically polarized photon will pass with probability 1
+assert p_1[1] == 0  # Horizontally polarized photon will never pass filter
+
+# Check the probabilities of a vertically polarized photon passing
+# through filters at 45 degrees angles
+p_2 = get_probabilities(fourier_basis, qubit_A)
+assert p_2[0] == 0.5  # Vertically polarized photon will pass with probability 1/2
+assert p_2[1] == 0.5  # Vertically polarized photon will pass with probability 1/2
+
+# Perform measurement on A in computational basis
+# and check that it is indeed in state 0 after the measurement
+measure(computational_basis, qubit_A)
+assert qubit_A.state == const.ket_0
+
+# Perform measurement on B in fourier basis and print the resulting state of the qubit
+outcome = measure(fourier_basis, qubit_B)
+print(outcome)
+dirac.print(qubit_B.state)
+```
 
 ## Setup
 
@@ -123,7 +153,7 @@ value = 0.71  |0> + 0.71  |1> ; vector space = C^2 ; length = 1.0
 
 ### Constants
 
-Just like the package comes with predefined qubits, gates and systems, so does Dirac notation, which is, in fact, used to predefine the aforementioned quantum systems (```from src.dirac_notation import constants as const```). It contains objects of `Ket`, `Bra` and `Matrix`
+Just like the package comes with predefined qubits, gates and systems, so does Dirac notation, which is, in fact, used to predefine the aforementioned quantum systems (`from src.dirac_notation import constants as const`). It contains objects of `Ket`, `Bra` and `Matrix`
 
 ```python
 >>> const.ket_0
