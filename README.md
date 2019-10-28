@@ -15,9 +15,9 @@ IN PROGRESS
 
 ## Example
 
-```python
-# Photon polarization example
+Photon polarization example, can be found in `src/main.py`:
 
+```python
 # Set up the system
 qubit_A = Qubit(const.ket_0)  # Vertical polarization, |0>
 qubit_B = Qubit(const.ket_1)  # Horizontal polarization, |1>
@@ -43,8 +43,8 @@ assert qubit_A.state == const.ket_0
 
 # Perform measurement on B in fourier basis and print the resulting state of the qubit
 outcome = measure(fourier_basis, qubit_B)
-print(outcome)
-dirac.print(qubit_B.state)
+print(outcome)  # either 0 or 1
+dirac.print(qubit_B.state)  # either |+> or |->, depending on the outcome
 ```
 
 ## Setup
@@ -57,15 +57,21 @@ $ cd Quantumformatics
 $ pip install requirements.txt
 ```
 
-To run tests:
+You can play with the framework by using `src/main.py` file:
 
 ```shell
-$ pytest
+$ python src/main.py
+```
+
+Run tests:
+
+```shell
+$ pytest --cov=src
 ```
 
 ## Design
 
-`Qudit`
+TODO
 
 ## Dirac (bra-ket) notation
 
