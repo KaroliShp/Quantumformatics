@@ -11,7 +11,7 @@ IN PROGRESS
 - [Example](#Example)
 - [Setup](#Setup)
 - [Design](#Design)
-- [Dirac (bra-ket) notation](#Dirac-notation)
+- [Dirac (bra-ket) notation](#Dirac-(bra-ket)-notation)
 
 ## Example
 
