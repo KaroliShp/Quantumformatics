@@ -14,4 +14,8 @@ class Qudit:
         self.vector_space = state.vector_space
         self.composite_system = None
         self.is_entangled = False
+
+    
+    def __str__(self):
+        return dirac.view(self.state)
     

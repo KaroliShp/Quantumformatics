@@ -4,7 +4,7 @@
 
 (Educational) framework for simulating quantum information and computation theory.
 
-IN PROGRESS
+DEVELOPMENT CURRENTLY IN PROGRESS
 
 ## Table of Contents
 
@@ -46,6 +46,8 @@ outcome = measure(fourier_basis, qubit_B)
 print(outcome)  # either 0 or 1
 dirac.print(qubit_B.state)  # either |+> or |->, depending on the outcome
 ```
+
+More experiments can be found in `src/experiments`.
 
 ## Setup
 

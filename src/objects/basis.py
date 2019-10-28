@@ -17,3 +17,10 @@ class Basis:
 
         self.states = states
         self.vector_space = states_arr.shape[0]
+    
+
+    def __str__(self):
+        string = '{'
+        for state in self.states:
+            string += f' {dirac.view(state, info=False)};'
+        return f'{string} }}, dimensions = {self.vector_space}'

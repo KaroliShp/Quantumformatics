@@ -11,8 +11,9 @@ from src.objects.qudit import Qudit
 from src.objects.qubit import Qubit
 from src.actions.actions import * # todo import properly
 
+from src.experiments.polarization import polarization_experiment
 
-if __name__ == '__main__':
+def example():
     # Photon polarization example
 
     # Set up the system
@@ -42,5 +43,21 @@ if __name__ == '__main__':
     outcome = measure(fourier_basis, qubit_B)
     print(outcome)
     dirac.print(qubit_B.state)
+
+
+def experiment_example():
+    qubit_A = Qubit(const.ket_0)
+    computational_basis = Basis([const.ket_0, const.ket_1])
+    result = polarization_experiment(qubit_A, computational_basis)
+    print('\nPhoton polarization experiment')
+    print(f'Qubit initial state: {qubit_A}')
+    print(f'Basis: {computational_basis}')
+    print(f'Outcome: {result[0]}')
+    print(f'Probabilities: {result[1]}')
+    print(f'Qubit final state: {qubit_A}\n')
+
+if __name__ == '__main__':
+    experiment_example()
+    
 
     
