@@ -1,16 +1,37 @@
 # Quantumformatics
 
-Framework for simulating quantum information and computation theory on classic computers.
+(Educational) framework for simulating quantum information and computation theory on classic computers.
+
+IN PROGRESS
 
 ## Table of Contents
 
+- [Example](#Example)
+- [Setup](#Setup)
+- [Design](#Design)
+- [Dirac (bra-ket) notation](#Dirac-notation)
+
 ## Example
+
+TODO
 
 ## Setup
 
-## Dirac notation
+Language: Python 3.6+
 
-Dirac notation is a convenient notation to represent linear algebra concepts, such as row and column vectors, matrices and linear algebra operations, in a human readable format for quick computation by hand. The purpose of Dirac notation in this repository is to increase readability and usability of the package for the users. You can describe and read quantum states in terms of kets and bras, which on computer is way simpler than trying to read multidimensional arrays.
+```
+$ git clone https://github.com/KaroliShp/Quantumformatics
+$ cd Quantumformatics
+$ pip install requirements.txt
+```
+
+## Design
+
+TODO
+
+## Dirac (bra-ket) notation
+
+Dirac notation is a convenient notation to represent linear algebra concepts, such as row and column vectors, matrices and linear algebra operations, in a human readable format for quick computation by hand. The purpose of Dirac notation in this repository is to increase readability and usability of the package for the users. You can describe and read quantum states/gates/etc. in terms of kets and bras, which on computer is way simpler than trying to read and input multidimensional arrays.
 
 ### Example
 
