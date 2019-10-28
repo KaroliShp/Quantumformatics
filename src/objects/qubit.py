@@ -7,7 +7,7 @@ from src import constants as const
 
 class Qubit(Qudit):
     """
-    Special case of Qudit in 2D Hilbert space
+    Special case of a qudit in 2D Hilbert space
     """
 
     def __init__(self, state: Ket):

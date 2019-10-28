@@ -13,4 +13,5 @@ class Qudit:
         self.state = state
         self.vector_space = state.vector_space
         self.composite_system = None
+        self.is_entangled = False
     

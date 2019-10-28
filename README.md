@@ -35,7 +35,7 @@ $ pytest
 
 ## Design
 
-TODO
+`Qudit`
 
 ## Dirac (bra-ket) notation
 
@@ -119,4 +119,18 @@ Dirac notation also supports human-readable output with any chosen vectors. The 
 |0> = 0.71 |+> + 0.71 |->
 >>> dirac.print(ket_0, [fourier_ket_0, fourier_ket_1], precision = 2, info = True)
 value = 0.71  |0> + 0.71  |1> ; vector space = C^2 ; length = 1.0
+```
+
+### Constants
+
+Just like the package comes with predefined qubits, gates and systems, so does Dirac notation, which is, in fact, used to predefine the aforementioned quantum systems (```from src.dirac_notation import constants as const```). It contains objects of `Ket`, `Bra` and `Matrix`
+
+```python
+>>> const.ket_0
+# |0>
+>>> const.ket_plus
+# |+>
+>>> const.comp_ket_x(1, 2)
+# |1>
+>>> 
 ```

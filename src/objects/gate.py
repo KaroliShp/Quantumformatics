@@ -12,3 +12,9 @@ class Gate:
         
         self.matrix = matrix
         self.vector_space = state.vector_space
+
+        self.is_entangling()
+
+
+    def is_entangling(self):
+        pass
