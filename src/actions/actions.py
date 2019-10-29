@@ -1,4 +1,5 @@
 import math
+from typing import List
 
 import numpy as np
 
@@ -7,45 +8,87 @@ from src.dirac_notation.ket import Ket
 from src.dirac_notation.matrix import Matrix
 from src.dirac_notation import functions as dirac
 from src.dirac_notation import constants as const
-from src.objects.gate import Gate
+from src.objects.gate import Gate, GateType
 from src.objects.qubit import Qubit
 from src.objects.qudit import Qudit
+from src.objects.quantum_system import QuantumSystem, SystemType
 from src.objects.basis import Basis
 
 
 # Qudits
 
 
-def set_state(state: Ket, qudit: Qudit) -> None:
-    assert isinstance(state, Ket) and isinstance(qudit, Qudit)
+def create_composite_system(*qudits) -> Qudit:
+    assert qudits and len(qudits) >= 2
+    assert not (False in [isinstance(qudit, QuantumSystem) for qudit in qudits])
 
-    qudit.state = state
-    qudit.vector_space = state.vector_space
+    # Create composite system
+    composite_state = dirac.tensor(*list(map(lambda x : x.state, qudits)))
+    composite_system = Qudit(composite_state)
+    composite_system.children_systems = list(qudits)
+    composite_system.type = SystemType.product
 
+    # Assign parents to qudits
+    for qudit in qudits:
+        assert qudit.parent_system == None
+        qudit.parent_system = composite_state
 
-def randomize(qudit: Qudit) -> None:
-    assert isinstance(qudit, Qudit)
-
-    self.state = Ket(np.random.rand(self.vector_space))
+    return composite_system
 
 
 # Reversable processes
 
 
-def apply_gate(gate: Gate, qudit: Qudit) -> None:
-    """
-    Apply quantum gate representing a reversable process on a qudit
-    """
-    assert isinstance(gate, Gate) and isinstance(qudit, Qudit)
+def apply_gate(gate: Gate, qudit: QuantumSystem) -> None:
+    pass
+
+
+def apply_interaction_gate(gate: Gate, qudit: QuantumSystem) -> None:
+    assert isinstance(gate, Gate) and isinstance(qudit, QuantumSystem)
+    assert gate.type == GateType.interaction or gate.type == GateType.entangling
+    assert qudit.type == SystemType.product or qudit.type == SystemType.entangled
     assert gate.vector_space == qudit.vector_space
 
-    qubit.state = gate.matrix * qudit.state
+    # Apply on the system as a whole
+    qudit.state = gate.matrix * qudit.state
+
+    # If the gate is entangling, system goes into entangled state
+    if gate.type == GateType.entangling:
+        qudit.type = SystemType.entangled
+        pass
+
+
+def apply_product_gate(gate: Gate, qudit: QuantumSystem) -> None:
+    assert isinstance(gate, Gate) and isinstance(qudit, QuantumSystem)
+    assert gate.type == GateType.product
+    assert qudit.type = SystemType.product
+    assert gate.vector_space == qudit.vector_space
+    assert len(gate.decomposition) == len(qudit.children_systems)
+
+    # Apply on the system as a whole
+    qudit.state = gate.matrix * qudit.state
+
+    # Apply on the individual qubits (that may also be composite systems)
+    for i in range(0, len(gate.decomposition)):
+        if gate.decomposition[i].type == GateType.simple and qudit.children_systems[i].type == SystemType.simple:
+            apply_simple_gate(gate.decomposition[i], qudit.children_systems[i])
+        else:
+            apply_product_gate(gate.decomposition[i], qudit.children_systems[i])
+
+
+def apply_simple_gate(gate: Gate, qudit: QuantumSystem) -> None:
+    assert isinstance(gate, Gate) and isinstance(qudit, QuantumSystem)
+    assert gate.type == GateType.simple
+    assert qudit.type = SystemType.simple
+    assert gate.vector_space == qudit.vector_space
+
+    qudit.state = gate.matrix * qudit.state
 
 
 # Basic measurements
 
 
-def get_probabilities(basis: Basis, qudit: Qudit) -> list:
+def get_probability_distribution(basis: Basis, qudit: Qudit) -> list:
     """
     Get probabilities of qudit measurement on the chosen ONB
     """
@@ -81,6 +124,3 @@ def measure(basis: Basis, qudit: Qudit) -> int:
     set_state(basis.states[outcome], qudit)
 
     return outcome
-
-
-# Composite systems

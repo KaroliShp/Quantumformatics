@@ -16,9 +16,12 @@ class Ket(Matrix):
         else:
             raise ValueError('')
         
-        self.vector_space = self.matrix.size
 
-    
+    @property
+    def vector_space(self):
+        return self.matrix.size
+
+
     def __str__(self):
         return str(self.matrix)
     

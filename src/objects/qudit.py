@@ -4,18 +4,21 @@ from src.dirac_notation.matrix import Matrix
 from src.dirac_notation import functions as dirac
 from src.dirac_notation import constants as const
 
+from src.objects.quantum_system import QuantumSystem, SystemType
 
-class Qudit:
+
+class Qudit(QuantumSystem):
+    """
+    General n-dimensional quantum system
+    Composition pattern: Composite
+    """
 
     def __init__(self, state: Ket):
-        assert dirac.is_ket(state) and dirac.is_unit(state)
+        super().__init__(state)
+        assert state.vector_space > 2
+        self.children_systems = []
+        self.type = SystemType.simple
         
-        self.state = state
-        self.vector_space = state.vector_space
-        self.composite_system = None
-        self.is_entangled = False
-
     
-    def __str__(self):
-        return dirac.str(self.state)
+
     

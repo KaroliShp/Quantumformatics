@@ -14,10 +14,15 @@ class Matrix:
         assert type(obj) == np.ndarray and len(obj.shape) == 2
 
         self.matrix = obj
-        self.vector_space = self.matrix.shape[0]  # TODO fix for non square matrices
+
+
+    @property
+    def vector_space(self):
+        return self.matrix.shape[0]
 
     
     def linear_combination(self, objs):
+        # TODO only let the objects to be an ONB for simplicity?
         if not (False in [ isinstance(obj, Matrix) for obj in objs ]):
             try:
                 return (True, np.linalg.solve(np.array([obj.matrix for obj in objs]).transpose(), self.matrix))
