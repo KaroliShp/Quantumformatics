@@ -13,6 +13,7 @@ DEVELOPMENT CURRENTLY IN PROGRESS
 - [Setup](#Setup)
 - [Design](#Design)
 - [Dirac (bra-ket) notation](#Dirac-bra-ket-notation)
+- [Questions](#Questions)
 
 ## Example
 
@@ -175,3 +176,15 @@ Just like the package comes with predefined qubits, gates and systems, so does D
 # |1>
 >>> 
 ```
+
+## Questions
+
+1) What happens when you apply lets say a product gate onto an entangled gate? Is there an interpretation for that?
+
+2) What happens when you apply a product gate on a simple system? Is this even possible?
+
+I think the idea is that IRL you build from qubits/qutrits to higher dimensions and so every simple state that is in higher dimension must be composite.
+
+3) How do you implement things like SWAP gate?
+
+4) Can you apply interaction gate on product state? What happens then, since it is not entangling? Do you simply decompose the state into tensor product?

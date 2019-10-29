@@ -15,7 +15,7 @@ from src.objects.quantum_system import QuantumSystem, SystemType
 from src.objects.basis import Basis
 
 
-# Qudits
+# Quantum systems
 
 
 def create_composite_system(*qudits) -> Qudit:
@@ -26,21 +26,15 @@ def create_composite_system(*qudits) -> Qudit:
     composite_state = dirac.tensor(*list(map(lambda x : x.state, qudits)))
     composite_system = Qudit(composite_state)
     composite_system.children_systems = list(qudits)
-    composite_system.type = SystemType.product
 
-    # Assign parents to qudits
+    # Assign the parent to qudits
     for qudit in qudits:
-        assert qudit.parent_system == None
         qudit.parent_system = composite_state
 
     return composite_system
 
 
 # Reversable processes
-
-
-def apply_gate(gate: Gate, qudit: QuantumSystem) -> None:
-    pass
 
 
 def apply_interaction_gate(gate: Gate, qudit: QuantumSystem) -> None:
@@ -52,16 +46,31 @@ def apply_interaction_gate(gate: Gate, qudit: QuantumSystem) -> None:
     # Apply on the system as a whole
     qudit.state = gate.matrix * qudit.state
 
-    # If the gate is entangling, system goes into entangled state
-    if gate.type == GateType.entangling:
-        qudit.type = SystemType.entangled
-        pass
+    # If the gate is entangling and system was a product, system goes into entangled state
+    if gate.type == GateType.entangling and qudit.type == SystemType.product:
+        qudit.system_type == SystemType.entangled
+        enter_entanglement(qudit)
+
+    # Handle case with interaction gate that creates a state that is no longer entangled
+
+
+def _enter_entanglement(qudit: QuantumSystem):
+    """
+    All dependent underlying systems become entangled once the composition is entangled
+    """
+    assert type(qudit) == QuantumSystem
+    for child in qudit.children_systems:
+        child.state = None  # Mixed state
+        become_entangled(child)
 
 
 def apply_product_gate(gate: Gate, qudit: QuantumSystem) -> None:
+    """
+    Product gate applied to a product system
+    """
     assert isinstance(gate, Gate) and isinstance(qudit, QuantumSystem)
-    assert gate.type == GateType.product
-    assert qudit.type = SystemType.product
+    assert gate.gate_type == GateType.product
+    assert qudit.system_type == SystemType.product
     assert gate.vector_space == qudit.vector_space
     assert len(gate.decomposition) == len(qudit.children_systems)
 
@@ -70,16 +79,35 @@ def apply_product_gate(gate: Gate, qudit: QuantumSystem) -> None:
 
     # Apply on the individual qubits (that may also be composite systems)
     for i in range(0, len(gate.decomposition)):
-        if gate.decomposition[i].type == GateType.simple and qudit.children_systems[i].type == SystemType.simple:
+        # Both are simple
+        apply_simple_gate(gate.decomposition[i], qudit.children_systems[i])
+        try:
             apply_simple_gate(gate.decomposition[i], qudit.children_systems[i])
-        else:
+            continue
+        except:
+            pass
+
+        # Both are product
+        try:
             apply_product_gate(gate.decomposition[i], qudit.children_systems[i])
+            continue
+        except:
+            pass
+        
+        # Both are composite
+        apply_interaction_gate(gate.decomposition[i], qudit.children_systems[i])
 
 
 def apply_simple_gate(gate: Gate, qudit: QuantumSystem) -> None:
+    """
+    Simple gate applied to a simple quantum system
+    
+    Simplification: to avoid problems with qudits in composite systems, currently
+    it is not allowed to apply a simple gate on a qubit that belongs to a composite system
+    """
     assert isinstance(gate, Gate) and isinstance(qudit, QuantumSystem)
-    assert gate.type == GateType.simple
-    assert qudit.type = SystemType.simple
+    assert gate.gate_type == GateType.simple
+    assert qudit.system_type == SystemType.simple
     assert gate.vector_space == qudit.vector_space
 
     qudit.state = gate.matrix * qudit.state

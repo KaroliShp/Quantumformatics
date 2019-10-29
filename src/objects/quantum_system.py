@@ -24,7 +24,24 @@ class QuantumSystem:
         assert dirac.is_ket(state) and dirac.is_unit(state)
         
         self.state = state
-        self.parent_system = None  # TODO: expand to n systems
+        self._parent_system = None
+        self.system_type = SystemType.simple
+    
+
+    @property
+    def parent_system(self):
+        return self._parent_system
+
+
+    @parent_system.setter
+    def parent_system(self, system):
+        """
+        Simplification - can only belong to one composite system at the moment
+        """
+        if self._parent_system is None:
+            self._parent_system = system
+        else:
+            raise ValueError('Quantum system already belongs to a composite system')
     
 
     @property
@@ -33,4 +50,7 @@ class QuantumSystem:
 
     
     def __str__(self) -> str:
-        return dirac.str(self.state)
+        return dirac.str(self.state, info=False)
+
+    def __repr__(self):
+        return self.__str__()

@@ -15,5 +15,5 @@ class Qubit(QuantumSystem):
 
     def __init__(self, state: Ket):
         super().__init__(state)
+        
         assert state.vector_space == 2
-        self.type = SystemType.simple

@@ -9,6 +9,13 @@ from src.dirac_notation.matrix import Matrix
 ket_0 = Ket([1, 0])
 ket_1 = Ket([0, 1])
 
+ket_00 = Ket([1, 0, 0, 0])
+ket_01 = Ket([0, 1, 0, 0])
+ket_10 = Ket([0, 0, 1, 0])
+ket_11 = Ket([0, 0, 0, 1])
+
+ket_0000 = Ket([1, 0, 0, 0, 0, 0, 0, 0])
+
 bra_0 = Bra([1, 0])
 bra_1 = Bra([0, 1])
 

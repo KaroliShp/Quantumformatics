@@ -16,13 +16,25 @@ class GateType(enum.Enum):
 
 class Gate:
 
-    def __init__(self, matrix: Matrix, type: GateType):
+    def __init__(self, matrix: Matrix):
         assert dirac.is_unitary(matrix)
         
         self.matrix = matrix
-        self.type = GateType.simple
-        self.decomposition = []
+        self.gate_type = GateType.simple
+        self._decomposition = []
+    
     
     @property
+    def decomposition(self):
+        return self._decomposition
+
+
+    @decomposition.setter
+    def decomposition(self, decomposition):
+        self.gate_type = GateType.product
+        self._decomposition = decomposition
+
+
+    @property
     def vector_space(self) -> int:
-        return self.state.vector_space
+        return self.matrix.vector_space

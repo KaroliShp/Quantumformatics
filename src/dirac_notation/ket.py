@@ -24,6 +24,9 @@ class Ket(Matrix):
 
     def __str__(self):
         return str(self.matrix)
+
+    def __repr__(self):
+        return self.__str__()
     
     
     def __rmul__(self, obj):
