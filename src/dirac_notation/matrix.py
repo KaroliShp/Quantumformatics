@@ -5,13 +5,16 @@ import numpy as np
 
 class Matrix:
     """
-    Class representing a matrix in Dirac notation
+    Class representing a matrix in Dirac notation (not vectors)
     """
 
     def __init__(self, obj):
+        if type(obj) == list:
+            obj = np.array(obj)
         assert type(obj) == np.ndarray and len(obj.shape) == 2
+
         self.matrix = obj
-        self.vector_space = self.matrix.size
+        self.vector_space = self.matrix.shape[0]  # TODO fix for non square matrices
 
     
     def linear_combination(self, objs):
@@ -48,7 +51,9 @@ class Matrix:
         
 
     def __mul__(self, obj):
-        if isinstance(obj, numbers.Number):
+        if type(self) == Matrix and type(obj) == Matrix:
+            return Matrix(np.matmul(self.matrix, obj.matrix))
+        elif isinstance(obj, numbers.Number):
             return type(self)(self.matrix * obj)
         return NotImplemented
 
@@ -68,7 +73,8 @@ class Matrix:
     def __eq__(self, obj):
         if type(self) == type(obj):
             return np.array_equal(self.matrix, obj.matrix)
-        return NotImplemented
+        else:
+            return False
 
 
     def __ne__(self, obj):

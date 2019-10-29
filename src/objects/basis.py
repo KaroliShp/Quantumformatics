@@ -22,5 +22,5 @@ class Basis:
     def __str__(self):
         string = '{'
         for state in self.states:
-            string += f' {dirac.view(state, info=False)};'
+            string += f' {dirac.str(state, info=False)};'
         return f'{string} }}, dimensions = {self.vector_space}'

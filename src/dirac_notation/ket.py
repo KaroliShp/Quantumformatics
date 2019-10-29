@@ -18,6 +18,7 @@ class Ket(Matrix):
         
         self.vector_space = self.matrix.size
 
+    
     def __str__(self):
         return str(self.matrix)
     

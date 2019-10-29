@@ -17,5 +17,5 @@ class Qudit:
 
     
     def __str__(self):
-        return dirac.view(self.state)
+        return dirac.str(self.state)
     

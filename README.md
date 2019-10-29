@@ -77,7 +77,7 @@ TODO
 
 ## Dirac (bra-ket) notation
 
-Dirac notation is a convenient notation to represent linear algebra concepts, such as row and column vectors, matrices and linear algebra operations, in a human readable format for quick computation by hand. The purpose of Dirac notation in this repository is to increase readability and usability of the package for the users. You can describe and read quantum states/gates/etc. in terms of kets and bras, which on computer is way simpler than trying to read and input multidimensional arrays.
+Dirac notation is a convenient notation used to represent linear algebra operations in a human readable format for quick computation by hand. The purpose of Dirac notation in this repository is to increase readability and usability of the package for the users. You can describe and read quantum states/gates/etc. in terms of kets and bras, which on computer is way simpler than trying to read and input multidimensional arrays.
 
 ### Example
 
@@ -112,7 +112,9 @@ dirac.print(ket_phi_x, [ket_psi_00, ket_psi_01, ket_psi_10, ket_psi_11])
 
 ### Design
 
-`Matrix` class represents an arbitrary matrix in a d-dimensional Hilbert space. `Ket` and `Bra` classes are derived from `Matrix` class and represent column and row vectors respectively. `Matrix` implementation uses `numpy` package under the hood (composition) to hold the values and perform calculations. The main motivation behind having distinct `Ket` and `Bra` classes is the fact that `numpy` does not support column vectors natively (all vectors are treated as `(n,)` shape `np.ndarray`), which makes it harder to write BraKet notation using it.
+`Matrix` class represents an arbitrary matrix in a d-dimensional Hilbert space. `Ket` and `Bra` classes are derived from `Matrix` class and represent column and row vectors respectively. 
+
+`Matrix` implementation uses NumPy package under the hood to hold the values and perform calculations, acting sort of like a wrapper around NumPy functions. The current reason behind composition instead of direct inheritence from `np.ndarray` is that not all funcitonality is required and/or applicable to the use case, but this may change in the future. The main motivation behind having distinct `Ket` and `Bra` classes is the fact that NumPy does not support column vectors natively (all vectors are treated as `(n,)` shape `np.ndarray`), which makes it harder to write matrices in bra-ket notation.
 
 ### Usage
 

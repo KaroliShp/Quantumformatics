@@ -25,39 +25,15 @@ is_same = lambda x, y : type(x) == type(y)
 # Arithmetic operations
 
 
-def add(obj1, obj2):
-    return obj1 + obj2
-
-
-def subtract(obj1, obj2):
-    return obj1 - obj2
-
-
-def multiply(obj1, obj2):
-    return obj1 * obj2
-
-
-def divide(obj1, obj2):
-    return obj1 / obj2
-
-
-def equals(obj1, obj2):
-    return obj1 == obj2
-
-
-def not_equals(obj1, obj2):
-    return obj1 != obj2
+def matrix_mult_elem(obj1, obj2):
+    if is_matrix(obj1) and is_matrix(obj2):
+        return np.multiply(obj1.matrix, obj2.matrix)
+    return NotImplemented
 
 
 def braket(obj1, obj2):
     if is_bra(obj1) and is_ket(obj2):
         return obj1 * obj2
-    return NotImplemented
-
-
-def matrix_multiply(obj1, obj2):
-    if is_matrix(obj1) and is_matrix(obj2):
-        return Matrix(np.multiply(obj1.matrix, obj2.matrix))
     return NotImplemented
 
 
@@ -80,7 +56,7 @@ def adjoint(obj):
     elif is_bra(obj):
         return Ket(np.conj(obj.matrix))
     elif is_matrix(obj):
-        return Matrix(np.conj(obj.matrix))
+        return Matrix(np.conj(obj.matrix).transpose())
     return NotImplemented
 
 
@@ -88,7 +64,7 @@ def adjoint(obj):
 
 
 is_unit = lambda x : (is_bra(x) or is_ket(x)) and np.linalg.norm(x.matrix) == 1
-is_unitary = lambda x : is_matrix(x) and np.allclose(np.eye(x.matrix.shape[0]), x.matrix.H * x.matrix)
+is_unitary = lambda x : is_matrix(x) and np.allclose(np.identity(x.vector_space), (adjoint(x) * x).matrix)
 is_orthogonal = lambda x, y : is_same(x, y) and (is_bra(x) or is_ket(x)) and np.dot(x.matrix, y.matrix) == 0
 is_orthonormal = lambda x, y : is_orthogonal(x, y) and is_unit(x) and is_unit(y)
 
@@ -96,7 +72,7 @@ is_orthonormal = lambda x, y : is_orthogonal(x, y) and is_unit(x) and is_unit(y)
 # Readability functions
 
 
-def view(obj, objs = None, precision = 2, info = True):
+def str(obj, objs = None, precision = 2, info = True):
     """
     Todo: print diagonalization of a matrix using chosen ONBs
     Extract to be reused throughout
@@ -164,8 +140,8 @@ def view(obj, objs = None, precision = 2, info = True):
             return view
 
     else:
-        return str(obj)
+        return builtins.str(obj)
 
 
 def print(obj, objs = None, precision = 2, info = True):
-    builtins.print(view(obj, objs, precision, info))
+    builtins.print(str(obj, objs, precision, info))
