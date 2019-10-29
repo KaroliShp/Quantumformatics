@@ -1,5 +1,6 @@
 import numbers
 import builtins
+from functools import reduce
 
 import numpy as np
 
@@ -37,10 +38,10 @@ def braket(obj1, obj2):
     return NotImplemented
 
 
-def tensor(obj1, obj2):
-    # Todo: implement arbitrary number of objects
-    if isinstance(obj1, Matrix) and isinstance(obj2, Matrix) and is_same(obj1, obj2):
-        return type(obj1)(np.kron(obj1.matrix, obj2.matrix))
+def tensor(obj1, obj2, *args):
+    if isinstance(obj1, Matrix) and isinstance(obj2, Matrix) and is_same(obj1, obj2) and not (False in [is_same(obj1, arg) for arg in args]):
+        # TODO could probably improve the performance
+        return type(obj1)(reduce(lambda x, y : np.kron(x, y), [obj1.matrix] + [obj2.matrix] + list(map(lambda z: z.matrix, args))))
     return NotImplemented
 
 

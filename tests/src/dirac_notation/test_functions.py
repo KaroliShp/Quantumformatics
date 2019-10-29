@@ -74,22 +74,24 @@ def test_is_same(input_1, input_2, expected_output):
         bra_0, ket_1, 0
     )
 ])
-def braket(input_1, input_2, expected_output):
+def test_braket(input_1, input_2, expected_output):
     output = dirac.braket(input_1, input_2)
     assert_that(output, equal_to(expected_output))
 
 
-@pytest.mark.parametrize('input_1,input_2,expected_output', [
+@pytest.mark.parametrize('input,expected_output', [
     (
-        ket_0, ket_0, Ket([1, 0, 0, 0])
+        [ket_0, ket_0], Ket([1, 0, 0, 0])
     ), (
-        bra_0, bra_0, Bra([1, 0, 0, 0])
+        [bra_0, bra_0], Bra([1, 0, 0, 0])
     ), (
-        identity_matrix, identity_matrix, Matrix(np.identity(4))
+        [ket_0, ket_0, ket_0], Ket([1, 0, 0, 0, 0, 0, 0, 0])
+    ), (
+        [identity_matrix, identity_matrix], Matrix(np.identity(4))
     )
 ])
-def tensor(input_1, input_2, expected_output):
-    output = dirac.tensor(input_1, input_2)
+def test_tensor(input, expected_output):
+    output = dirac.tensor(*input)
     assert_that(output, equal_to(expected_output))
 
 
