@@ -6,13 +6,13 @@ from src.dirac_notation.matrix import Matrix
 from src.dirac_notation import functions as dirac
 from src.dirac_notation import constants as const
 
+from src.objects.qubit import Qubit
+
 
 class GateType(enum.Enum):
-
     simple = 1
     product = 2
     interaction = 3
-    entangling = 4
 
 
 class Gate:
@@ -21,20 +21,9 @@ class Gate:
         #assert dirac.is_unitary(matrix)
         
         self.matrix = matrix
-        self._gate_type = GateType.simple
+        self.gate_type = GateType.simple
         self._decomposition = None
-    
-    
-    @property
-    def gate_type(self) -> GateType:
-        return self._gate_type
-    
-
-    @gate_type.setter
-    def gate_type(self, gate_type: GateType) -> None:
-        if gate_type == GateType.entangling:
-            self._decomposition = None
-        self._gate_type = gate_type
+        self.interaction_function = None
     
 
     @property
@@ -51,3 +40,37 @@ class Gate:
     @property
     def vector_space(self) -> int:
         return self.matrix.vector_space
+
+    
+    # Hacky solution to entangling gate problem
+
+
+    def interact(self, *qubits):
+        return NotImplemented
+
+
+# Interaction gate functions
+
+
+def cnot_function(qubit_1, qubit_2):
+    assert isinstance(qubit_1, Qubit) and isinstance(qubit_2, Qubit)
+
+    if qubit_1.state == const.ket_0 and qubit_2.state in const.comp_basis_vectors(2):
+        return (False, (qubit_1.state, qubit_2.state))
+    elif qubit_1.state == const.ket_1 and qubit_2.state == const.ket_0:
+        return (False, (qubit_1.state, const.ket_1))
+    elif qubit_1.state == const.ket_1 and qubit_2.state == const.ket_1:
+        return (False, (qubit_1.state, const.ket_0))
+    
+    elif qubit_1.state == const.ket_plus and qubit_2.state == const.ket_0:
+        return (True, const.ket_phi_plus)
+    elif qubit_1.state == const.ket_minus and qubit_2.state == const.ket_0:
+        return (True, const.ket_phi_minus)
+    elif qubit_1.state == const.ket_plus and qubit_2.state == const.ket_1:
+        return (True, const.ket_psi_plus)
+    elif qubit_1.state == const.ket_minus and qubit_2.state == const.ket_1:
+        return (True, const.ket_psi_minus)
+    
+    else:
+        return NotImplemented
+

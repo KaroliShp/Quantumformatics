@@ -3,8 +3,9 @@ from pytest_mock import mocker
 from hamcrest import *
 import numpy as np
 
-from src.objects.gate import Gate, GateType
+from src.objects.gate import Gate, GateType, cnot_function
 from src.dirac_notation.constants import *
+from src.objects.qubit import Qubit
 
 
 @pytest.mark.parametrize('input,expected_output', [
@@ -35,20 +36,16 @@ def test_init_fail(input):
 """
 
 
-@pytest.mark.parametrize('input_1,input_2', [
+@pytest.mark.parametrize('input_1,input_2,expected_output', [
     (
-        identity_matrix(2), GateType.simple
+        Qubit(ket_0), Qubit(ket_1), (False, (ket_0, ket_1))
     ), (
-        identity_matrix(4), GateType.product
+        Qubit(ket_1), Qubit(ket_1), (False, (ket_1, ket_0))
     ), (
-        cnot_matrix, GateType.entangling
+        Qubit(ket_minus), Qubit(ket_1), (True, ket_psi_minus)
     )
 ])
-def test_gate_type(input_1, input_2):
-    gate = Gate(input_1)
-    if input_2 == GateType.entangling:
-        gate.decomposition = []
-    gate.gate_type = input_2
-
-    assert_that(gate.gate_type, equal_to(input_2))
-    assert_that(gate.decomposition, equal_to(None))
+def test_cnot_function(input_1, input_2, expected_output):
+    output = cnot_function(input_1, input_2)
+    assert_that(output[0], equal_to(expected_output[0]))
+    assert_that(output[1], equal_to(expected_output[1]))

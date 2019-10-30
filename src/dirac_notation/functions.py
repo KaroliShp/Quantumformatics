@@ -64,8 +64,8 @@ def adjoint(obj):
 # Information functions
 
 
-is_unit = lambda x : (is_bra(x) or is_ket(x)) and np.linalg.norm(x.matrix) == 1
-is_unitary = lambda x : is_matrix(x) and np.allclose(np.identity(x.vector_space), (adjoint(x) * x).matrix)
+is_unit = lambda x : (is_bra(x) or is_ket(x)) and np.round(np.linalg.norm(x.matrix), 2) == 1.0
+is_unitary = lambda x : is_matrix(x) and np.allclose(np.identity(x.vector_space), (adjoint(x) * x).matrix, atol=0.8)
 is_orthogonal = lambda x, y : is_same(x, y) and (is_bra(x) or is_ket(x)) and np.dot(x.matrix, y.matrix) == 0
 is_orthonormal = lambda x, y : is_orthogonal(x, y) and is_unit(x) and is_unit(y)
 

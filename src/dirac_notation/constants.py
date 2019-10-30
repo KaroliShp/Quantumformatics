@@ -77,7 +77,9 @@ hadamard_matrix = fourier_transform_matrix(2) # 2D is known as Hadamard gate (H)
 # CNOT matrix
 cnot_matrix = dirac.tensor((ket_0 * bra_0), identity_matrix(2)) + dirac.tensor((ket_1 * bra_1), pauli_x_matrix)
 
+
 # Basis
+
 
 comp_basis_vectors = lambda d : [comp_ket_x(i, d) for i in range(0, d)]
 fourier_basis_vectors = lambda d : [fourier_bra_x(i, d) for i in range(0, d)]
