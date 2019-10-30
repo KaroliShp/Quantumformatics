@@ -13,7 +13,8 @@ class Basis:
         # Check that the vectors form an ONB
         # TODO fix assertion tolerance
         states_arr = np.array([state.matrix for state in states])
-        assert np.allclose(states_arr.transpose() * states_arr, const.identity_matrix(states_arr.shape[0]).matrix, atol=1)
+        assert states_arr.shape[0] == states_arr.shape[1]
+        assert np.allclose(states_arr.transpose() * states_arr, const.identity_matrix(states_arr.shape[0]).matrix, atol=0.8)
 
         self.states = states
         self.vector_space = states_arr.shape[0]

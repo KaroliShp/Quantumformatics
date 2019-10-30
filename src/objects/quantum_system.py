@@ -9,6 +9,7 @@ from src.dirac_notation import constants as const
 
 
 class SystemType(enum.Enum):
+
     simple = 1
     product = 2
     entangled = 3
@@ -20,13 +21,15 @@ class QuantumSystem:
     Composition pattern: Component
     """
 
-    def __init__(self, state: Ket) -> None:
+    def __init__(self, state: Ket):
         assert dirac.is_ket(state) and dirac.is_unit(state)
         
         self.state = state
+        self.system_type = SystemType.simple  # Type of this system
+
+        self.has_parent_system = False  # Belongs to a composite system or not
         self._parent_system = None
-        self.system_type = SystemType.simple
-    
+
 
     @property
     def parent_system(self):
@@ -34,12 +37,13 @@ class QuantumSystem:
 
 
     @parent_system.setter
-    def parent_system(self, system):
+    def parent_system(self, system) -> None:
         """
         Simplification - can only belong to one composite system at the moment
         """
-        if self._parent_system is None:
+        if not self.has_parent_system:
             self._parent_system = system
+            self.has_parent_system = True
         else:
             raise ValueError('Quantum system already belongs to a composite system')
     
@@ -52,5 +56,6 @@ class QuantumSystem:
     def __str__(self) -> str:
         return dirac.str(self.state, info=False)
 
-    def __repr__(self):
+
+    def __repr__(self) -> str:
         return self.__str__()

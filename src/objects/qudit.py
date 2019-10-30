@@ -15,10 +15,10 @@ class Qudit(QuantumSystem):
 
     def __init__(self, state: Ket):
         super().__init__(state)
-
         assert state.vector_space > 2
-        self._children_systems = []
 
+        self._children_systems = None
+    
 
     @property
     def children_systems(self):
@@ -26,16 +26,15 @@ class Qudit(QuantumSystem):
 
 
     @children_systems.setter
-    def children_systems(self, systems):
-        """
-        Simplification - can only belong to one composite system at the moment
-        """
-        if self._children_systems == []:
+    def children_systems(self, systems: list) -> None:
+        if self.system_type == SystemType.simple:
             self._children_systems = systems
-            self.system_type = SystemType.product
+            self.system_type = SystemType.product  # Automatically infer
+        elif systems is None:
+            self._children_systems = None
+            self.system_type = SystemType.simple
         else:
-            raise ValueError('Quantum system already belongs to a composite system')
-        
+            raise ValueError('Quantum system already has children states')
     
 
     

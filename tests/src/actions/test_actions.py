@@ -32,7 +32,7 @@ def test_create_composite_system(input_1, input_2, expected_output):
 
 # Reversable processes
 
-
+"""
 @pytest.mark.parametrize('input_1,input_2,expected_output', [
     (
         Gate(identity_matrix(2)), Qubit(ket_0), ket_0
@@ -64,5 +64,6 @@ def test_apply_product_gate(input_1, input_2, expected_output):
         qudit.parent_system = composite_system
     
     apply_product_gate(product_gate, composite_system)
+"""
 
 
