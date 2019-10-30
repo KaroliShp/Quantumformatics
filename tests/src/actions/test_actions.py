@@ -17,7 +17,7 @@ from src.dirac_notation import functions as dirac
 # Gotta fix it later
 
 
-# Test quantum systems
+# Quantum systems
 
 
 @pytest.mark.parametrize('input,expected_output', [
@@ -149,3 +149,7 @@ def test_apply_simple_gate(input_1, input_2, expected_output):
     assert_that(input_2.state, equal_to(expected_output))
     assert_that(input_2.system_type, equal_to(SystemType.simple))
     assert_that(input_2.vector_space, equal_to(expected_output.vector_space))
+
+
+# Basic measurements
+

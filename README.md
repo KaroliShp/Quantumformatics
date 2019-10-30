@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.com/KaroliShp/Quantumformatics.svg?token=H6dNDzgb7zQyC23kvSsb&branch=master)](https://travis-ci.com/KaroliShp/Quantumformatics)
 [![codecov](https://codecov.io/gh/KaroliShp/Quantumformatics/branch/master/graph/badge.svg)](https://codecov.io/gh/KaroliShp/Quantumformatics)
 
-(Educational) framework for simulating quantum information and computation theory.
+Framework for simulating quantum information and computation theory on classic systems (educational purposes)
 
 DEVELOPMENT CURRENTLY IN PROGRESS
 
@@ -13,7 +13,7 @@ DEVELOPMENT CURRENTLY IN PROGRESS
 - [Setup](#Setup)
 - [Design](#Design)
 - [Dirac (bra-ket) notation](#Dirac-bra-ket-notation)
-- [Questions](#Questions)
+- [Repository issues](#Repository-Issues)
 
 ## Example
 
@@ -75,7 +75,120 @@ $ pytest --cov=src
 
 ## Design
 
+### Quantum systems
+
+Quantum systems are represented by `Qubit` and `Qudit` classes, as the name suggest representing 2-dimensional and N-dimensional complex vector spaces respectively. Quantum system has a `state`, which is a `Ket`, and a `system_type` of the system state they are describing, more specifically `SystemType.simple`, `SystemType.product` and  `SystemType.entangled`:
+
+```python
+qubit_A = Qubit(ket_0)
+# |0>
+qubit_A.system_type
+# SystemType.simple
+```
+
+We can define compositions of quantum systems to define product states:
+
+```python
+qubit_B = Qubit(ket_0)
+# |0>
+system_AB = create_composite_system(qubit_A, qubit_B)
+# |00> = |0> ⊗ |0> = ( 1 0 0 0 )
+system_AB.system_type
+# SystemType.product
+system_AB.children_systems
+# [ qubit_A, qubit_B ]
+qubit_A.parent_system
+# system_AB
+```
+
+In the above example, `system_AB` is itself a `Qudit` representing 4-dimensional complex vector space, composed of `qubit_A` and `qubit_B`. All systems have references pointing to each other.
+
+### Quantum gates
+
+Quantum gates are described by `Gate` class. Gates have unitary `matrix`, which are of type `Matrix`, and `gate_type` describing the type of the gate, more specifically `GateType.simple`, `GateType.product` and `GateType.interaction`:
+
+```python
+unitary_matrix = (ket_plus * bra_0) + (ket_minus * bra_1)
+hadamard_gate = Gate(unitary_matrix)
+# H = |+><0| + |-><1|
+hadamard_gate.gate_type
+# GateType.simple
+```
+
+You can combine multiple gates to product gates for product measurements:
+
+```python
+identity_gate = Gate(identity_matrix)
+# I = ( 1 0 / 0 1 )
+product_gate = create_product_gate(hadamard_gate, identity_gate)
+# U = H ⊗ I
+product_gate.gate_type
+#GateType.product
+```
+
+Currently, interaction gates are only supported as custom gates. The main reason behind this at the moment is the complexity of evaluating entangling states and correct products. This will be done later. The implementations for most important interaction gates and their entangling properties are predefined:
+
+```python
+cnot_gate = dirac.tensor(ket_0 * bra_0, identity_matrix) + dirac.tensor(ket_1 * bra_1, pauli_x_matrix)
+# CNOT = |0><0| tensor I + |1><1| tensor X
+cnot_gate.gate_type
+# GateType.interaction
+```
+
+### Applying Quantum Gates
+
+Module `actions.py` define all the required functions to apply gates on systems. Simple gates:
+
+```python
+qubit_A.state
+# |0>
+apply_simple_gate(hadamard_gate, qubit_A)
+qubit_A.state
+# |+>
+```
+
+Product gates (gate applies on the object that represents the system as a whole and its constituent parts):
+
+```python
+system_AB.state
+# |00> = |0> ⊗ |0> = ( 1 0 0 0 )
+product_gate.matrix
+# U = H ⊗ I
+apply_product_gate(product_gate, system_AB)
+system_AB
+# U|00> = H|0> ⊗ I|0>
+system_AB.system_type
+# SystemType.product
+qubit_A.state
+# H|0>
+qubit_B.state
+# I|0>
+```
+
+Interaction gates:
+
+```python
+qubit_C = Qubit(ket_plus)
+# |+>
+qubit_D = Qubit(ket_0)
+# |0>
+system_CD = create_composite_system(qubit_C, qubit_D)
+# |+> ⊗ |0>
+apply_interaction_gate(cnot_gate, system_CD)
+system_CD
+# |psi_plus>
+system_CD.system_type
+# SystemType.entangled
+qubit_C.state
+# None - represents a mixed state at the moment
+qubit_D.state
+# None
+```
+
+### Measurements
+
 TODO
+
 
 ## Dirac (bra-ket) notation
 
@@ -177,14 +290,33 @@ Just like the package comes with predefined qubits, gates and systems, so does D
 >>> 
 ```
 
-## Questions
+## Repository issues
 
-1) What happens when you apply lets say a product gate onto an entangled gate? Is there an interpretation for that?
+List of repository issues, which are just observations and thoughts, rather than the "GitHub issues"
 
-2) What happens when you apply a product gate on a simple system? Is this even possible?
+### Compositions of quantum systems are very messy:
 
-I think the idea is that IRL you build from qubits/qutrits to higher dimensions and so every simple state that is in higher dimension must be composite.
+- A system can belong to infinite amount of other systems
+- A system can also be comprised of infinite amount of other systems
+- Measurement/reversible process on one of those consituents affects all involved parts
 
-3) How do you implement things like SWAP gate?
+Current solution to quantum systems: can only belong to one parent at one point in time (which can belong to one parent etc.). In this way, we dont have an infinite number of states. Gate application is then significantly easier as well.
 
-4) Can you apply interaction gate on product state? What happens then, since it is not entangling? Do you simply decompose the state into tensor product?
+### Interaction gates are not as trivial as I thought they were
+
+- Not all interaction gates are entangling (and I don't yet know if it is possible to figure out all states that are entangled by an interaction gate)
+- Interaction gates applied on entangled states (if this is legit) may not necessarily keep those states entangled
+- Hardest step is computation - when a gate is an interaction gate, it cannot be expressed as a product of two states. So after applying an interaction gate to a product state that remains a product state, how do we figure out numerically what happens to each state?
+- If you apply entangling gate to a state that is compromised of product states, does it mean that all consituents are entangled?
+- What happens when product states are made of entangled states that are made of product states (recursion)
+
+Current solution to interaction gates: must be predefined.
+
+
+### No representation of mixed states
+
+- Did not have time to read about this yet
+
+### Human readable output needs some work on notation
+
+- Did not have time to make it prettier

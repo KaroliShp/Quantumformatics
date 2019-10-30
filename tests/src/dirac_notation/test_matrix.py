@@ -5,12 +5,12 @@ from hamcrest import *
 from src.dirac_notation.matrix import Matrix
 from src.dirac_notation.ket import Ket
 from src.dirac_notation.bra import Bra
-from tests.src.dirac_notation.constants import *
+from src.dirac_notation.constants import *
 
 
 @pytest.mark.parametrize('input,expected_output', [
     (
-        identity_matrix, 2
+        identity_matrix(2), 2
     )
 ])
 def test_add(input, expected_output):
@@ -22,7 +22,7 @@ def test_add(input, expected_output):
 
 @pytest.mark.parametrize('input_1,input_2,expected_output', [
     (
-        identity_matrix, identity_matrix, 2 * identity_matrix
+        identity_matrix(2), identity_matrix(2), 2 * identity_matrix(2)
     )
 ])
 def test_add(input_1, input_2, expected_output):
@@ -32,7 +32,7 @@ def test_add(input_1, input_2, expected_output):
 
 @pytest.mark.parametrize('input_1,input_2,expected_output', [
     (
-        identity_matrix, identity_matrix, zero_matrix
+        identity_matrix(2), identity_matrix(2), zero_matrix(2, 2)
     )
 ])
 def test_sub(input_1, input_2, expected_output):

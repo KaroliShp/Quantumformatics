@@ -5,7 +5,7 @@ import numpy as np
 
 from src.objects.quantum_system import SystemType
 from src.objects.qubit import Qubit
-from tests.src.dirac_notation.constants import *
+from src.dirac_notation.constants import *
 
 
 @pytest.mark.parametrize('input,expected_output', [
@@ -21,7 +21,7 @@ def test_init(input, expected_output):
 
 @pytest.mark.parametrize('input', [
     (
-        ket_00
+        comp_ket_x(0, 4)
     )
 ])
 def test_init_fail(input):
